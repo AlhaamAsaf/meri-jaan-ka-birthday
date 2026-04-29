@@ -22,14 +22,40 @@
     inset: 0;
     z-index: 0;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
   }
 
   .videobg video {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: cover;
     filter: contrast(1.05) saturate(1.08) brightness(0.84);
-    transform: scale(1.02);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .videobg video {
+      /* For mobile, prioritize width coverage */
+      width: 100%;
+      height: auto;
+      min-width: 100vw;
+      min-height: 100vh;
+    }
+  }
+
+  /* Landscape orientation on mobile */
+  @media (max-height: 600px) and (orientation: landscape) {
+    .videobg video {
+      height: 100%;
+      width: auto;
+    }
   }
 
   .video-overlay {
@@ -37,6 +63,7 @@
     inset: 0;
     background: linear-gradient(180deg, rgba(6,6,22,0.18), rgba(9,10,26,0.7));
     pointer-events: none;
+    z-index: 1;
   }
 
   /* ====== CONTROLS ====== */
@@ -115,6 +142,26 @@
     opacity: 0.95;
   }
 
+  /* Mobile controls adjustment */
+  @media (max-width: 480px) {
+    .volume-control {
+      bottom: 16px;
+      right: 16px;
+      width: 40px;
+      padding: 8px 10px;
+      font-size: 11px;
+    }
+
+    .volume-control:hover {
+      width: 170px;
+      padding: 8px 12px;
+    }
+
+    .volume-slider {
+      min-width: 80px;
+    }
+  }
+
   .pause-btn {
     position: fixed;
     bottom: 24px;
@@ -184,6 +231,21 @@
     border: 0;
   }
 
+  /* Mobile pause button adjustment */
+  @media (max-width: 480px) {
+    .pause-btn {
+      bottom: 16px;
+      left: 16px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .pause-icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
   /* ====== BACK BUTTON ====== */
   .back-btn {
     position: fixed;
@@ -218,6 +280,15 @@
     border-color: rgba(212,168,255,0.6);
   }
 
+  @media (max-width: 480px) {
+    .back-btn {
+      bottom: 70px;
+      left: 16px;
+      font-size: 11px;
+      padding: 8px 14px;
+    }
+  }
+
   /* ====== PAGE DOTS ====== */
   .page-dots {
     position: fixed;
@@ -244,6 +315,22 @@
     background: #d4a8ff;
     border-color: #d4a8ff;
     transform: scale(1.3);
+  }
+
+  @media (max-width: 480px) {
+    .page-dots {
+      bottom: 20px;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+    }
+
+    .dot.active {
+      transform: scale(1.2);
+    }
   }
 
   /* ====== PAGES ====== */
@@ -293,6 +380,8 @@
     text-align: center;
     z-index: 2;
     padding: 2rem;
+    max-height: 100vh;
+    overflow-y: auto;
   }
 
   .greeting {
@@ -332,6 +421,14 @@
     justify-content: center;
     margin-bottom: 1.5rem;
     animation: fadeUp 1s ease 1.1s both;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 480px) {
+    .candle-row {
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
   }
 
   .candle { display: flex; flex-direction: column; align-items: center; }
@@ -376,6 +473,16 @@
     border-radius: 50%;
     filter: blur(0.5px);
     box-shadow: 0 12px 20px rgba(0,0,0,0.16);
+  }
+
+  @media (max-width: 480px) {
+    .cake-base {
+      margin-bottom: 1.5rem;
+    }
+
+    .cake-base::before {
+      width: 180px;
+    }
   }
 
   .cake-top {
@@ -484,6 +591,8 @@
     text-align: center;
     padding: 2rem;
     max-width: 700px;
+    max-height: 100vh;
+    overflow-y: auto;
   }
 
   .celebration-title {
@@ -545,6 +654,14 @@
     justify-content: center;
     gap: 1.5rem;
     margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 480px) {
+    .balloon-row {
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
   }
 
   .balloon {
@@ -570,6 +687,13 @@
     position: relative;
   }
 
+  @media (max-width: 480px) {
+    .balloon-body {
+      width: 32px;
+      height: 40px;
+    }
+  }
+
   .balloon-body::after {
     content: '';
     position: absolute;
@@ -591,6 +715,12 @@
     overflow-y: auto;
     justify-content: center;
     padding: 3rem 2rem;
+  }
+
+  @media (max-width: 480px) {
+    #page3 {
+      padding: 2rem 1.5rem;
+    }
   }
 
   .p3-inner {
@@ -634,6 +764,13 @@
     overflow: hidden;
   }
 
+  @media (max-width: 480px) {
+    .letter-card {
+      padding: 1.5rem 1.5rem;
+      border-radius: 15px;
+    }
+  }
+
   .letter-card::before {
     content: '"';
     font-family: 'Playfair Display', serif;
@@ -654,6 +791,14 @@
     min-height: 220px;
   }
 
+  @media (max-width: 480px) {
+    .letter-message {
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: auto;
+    }
+  }
+
   .letter-footer {
     display: flex;
     justify-content: space-between;
@@ -661,6 +806,8 @@
     margin-top: 1.2rem;
     padding-top: 1rem;
     border-top: 1px solid rgba(255,255,255,0.08);
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
   .letter-date { font-size: 13px; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; }
@@ -670,6 +817,19 @@
     font-style: italic;
     font-size: 16px;
     color: #d4a8ff;
+  }
+
+  @media (max-width: 480px) {
+    .letter-date,
+    .letter-to {
+      font-size: 12px;
+    }
+
+    .letter-footer {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 
   /* ====== SHARED NEXT BUTTON ====== */
@@ -703,6 +863,14 @@
   .next-btn:active { transform: translateY(0) scale(0.98); }
   .btn-arrow { transition: transform 0.3s ease; }
   .next-btn:hover .btn-arrow { transform: translateX(5px); }
+
+  @media (max-width: 480px) {
+    .next-btn {
+      font-size: 13px;
+      padding: 12px 28px;
+      gap: 8px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -815,7 +983,7 @@
 
     <div class="letter-card">
 
-      <p>Happy birthday Merii jaaaan meri cutiieee patoootieeee meri chuziiiii you are the 
+      <p class="letter-message">Happy birthday Merii jaaaan meri cutiieee patoootieeee meri chuziiiii you are the 
         bestest friend i could have ever asked for you bring so much joy wisdom gawarpan and
          teas into my life idk if i can ever imagine life without YOU.I dont even have words to
           explain how much i care about you, thats part of the reason i made this so i can put some effort into it
@@ -824,7 +992,7 @@
     You're the kind of person whose existence alone can light up a persons whole life.
   i have met many people but none who feel as quietly necessary as you in my life.
 You're my SoUl fRiEnD and im PROUD of it.If something happens just know that i am always here for you
-for your rants anything literally mwah i wuv u. </p>>
+for your rants anything literally mwah i wuv u. </p>
 
       <div class="letter-footer">
         <span class="letter-date" id="todayDate"></span>
