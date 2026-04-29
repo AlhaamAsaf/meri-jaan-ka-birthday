@@ -31,30 +31,38 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     filter: contrast(1.05) saturate(1.08) brightness(0.84);
   }
 
-  /* Mobile optimizations */
+  /* Mobile optimizations - show full video without cropping */
   @media (max-width: 768px) {
     .videobg video {
-      /* For mobile, prioritize width coverage */
+      object-fit: contain;
       width: 100%;
-      height: auto;
-      min-width: 100vw;
-      min-height: 100vh;
+      height: 100%;
+      background: #000;
     }
   }
 
   /* Landscape orientation on mobile */
   @media (max-height: 600px) and (orientation: landscape) {
     .videobg video {
+      object-fit: contain;
+      width: 100%;
       height: 100%;
-      width: auto;
+    }
+  }
+
+  /* Extra small screens */
+  @media (max-width: 480px) {
+    .videobg video {
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      background: #000;
     }
   }
 
@@ -999,169 +1007,108 @@ for your rants anything literally mwah i wuv u. </p>
         <span class="letter-to">For Hania, with love ♡</span>
       </div>
     </div>
-
   </div>
 </div>
 
+<!-- JavaScript -->
 <script>
-  // Stars
-  function makeStars(id, n) {
-    const c = document.getElementById(id);
-    if (!c) return;
-    for (let i = 0; i < n; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${1.5+Math.random()*3}s;opacity:${Math.random()};`;
-      c.appendChild(s);
+  // Generate stars
+  function generateStars(containerId, count = 50) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    for (let i = 0; i < count; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.setProperty('--dur', (Math.random() * 3 + 1) + 's');
+      container.appendChild(star);
     }
   }
-  makeStars('stars', 80);
-  makeStars('stars2', 80);
-  makeStars('stars3', 80);
 
-  // Date
-  const d = new Date();
-  document.getElementById('todayDate').textContent = d.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+  generateStars('stars', 40);
+  generateStars('stars2', 40);
+  generateStars('stars3', 40);
 
-  // Page state
-  let currentPage = 1;
-  const totalPages = 3;
+  // Set today's date
+  const today = new Date();
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('todayDate').textContent = today.toLocaleDateString('en-US', options);
 
-  function goTo(n) {
-    // Clamp between 1 and totalPages
-    n = Math.max(1, Math.min(totalPages, n));
-
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page' + n).classList.add('active');
-
-    // Update dots
-    document.querySelectorAll('.dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === n - 1);
-    });
-
-    // Show/hide back button
-    const backBtn = document.getElementById('backBtn');
-    if (n > 1) {
-      backBtn.classList.add('visible');
-    } else {
-      backBtn.classList.remove('visible');
-    }
-
-    // Update browser history so browser back button works too
-    history.pushState({ page: n }, '', '#page' + n);
-
-    currentPage = n;
-  }
-
-  function goBack() {
-    if (currentPage > 1) goTo(currentPage - 1);
-  }
-
-  // Handle browser back/forward buttons
-  window.addEventListener('popstate', (e) => {
-    if (e.state && e.state.page) {
-      const n = e.state.page;
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page' + n).classList.add('active');
-      document.querySelectorAll('.dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === n - 1);
-      });
-      const backBtn = document.getElementById('backBtn');
-      n > 1 ? backBtn.classList.add('visible') : backBtn.classList.remove('visible');
-      currentPage = n;
-    }
-  });
-
-  // Set initial history state
-  history.replaceState({ page: 1 }, '', '#page1');
-
-  // Volume and mute controls
+  // Video controls
   const video = document.getElementById('bgVideo');
-  const muteBtn = document.getElementById('muteBtn');
-  const volumeIcon = muteBtn.querySelector('.volume-icon');
+  const pauseBtn = document.getElementById('pauseBtn');
   const volumeSlider = document.getElementById('volumeSlider');
   const volumeValue = document.getElementById('volumeValue');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const pauseLabel = document.getElementById('pauseLbl');
+  const muteBtn = document.getElementById('muteBtn');
 
-  video.volume = 0.5;
-  volumeValue.textContent = `${Math.round(video.volume * 100)}%`;
-  updateVolumeIcon();
-
-  function updateVolumeIcon() {
-    if (video.muted || video.volume === 0) {
-      volumeIcon.textContent = '🔇';
-    } else if (video.volume <= 0.5) {
-      volumeIcon.textContent = '🔉';
-    } else {
-      volumeIcon.textContent = '🔊';
-    }
-  }
-
-  function updatePlayPauseIcon() {
-    if (video.paused) {
-      pauseBtn.classList.add('paused');
-      pauseBtn.classList.remove('playing');
-      pauseLabel.textContent = 'Play';
-    } else {
-      pauseBtn.classList.add('playing');
-      pauseBtn.classList.remove('paused');
-      pauseLabel.textContent = 'Pause';
-    }
-  }
-
-  volumeSlider.addEventListener('input', () => {
-    const value = parseFloat(volumeSlider.value);
-    video.volume = value;
-    volumeValue.textContent = `${Math.round(value * 100)}%`;
-
-    if (value === 0) {
-      video.muted = true;
-    } else {
-      video.muted = false;
-    }
-
-    updateVolumeIcon();
-  });
-
-  function toggleMute() {
-    video.muted = !video.muted;
-    if (!video.muted && video.volume === 0) {
-      video.volume = 0.5;
-      volumeSlider.value = 0.5;
-      volumeValue.textContent = '50%';
-    }
-    updateVolumeIcon();
-  }
+  pauseBtn.addEventListener('click', togglePlayPause);
+  volumeSlider.addEventListener('input', adjustVolume);
+  muteBtn.addEventListener('click', toggleMute);
 
   function togglePlayPause() {
     if (video.paused) {
       video.play();
+      pauseBtn.classList.remove('paused');
+      pauseBtn.classList.add('playing');
+      document.getElementById('pauseLbl').textContent = 'Pause';
     } else {
       video.pause();
+      pauseBtn.classList.remove('playing');
+      pauseBtn.classList.add('paused');
+      document.getElementById('pauseLbl').textContent = 'Play';
     }
-    updatePlayPauseIcon();
   }
 
-  video.addEventListener('play', updatePlayPauseIcon);
-  video.addEventListener('pause', updatePlayPauseIcon);
-  updatePlayPauseIcon();
+  function adjustVolume(e) {
+    video.volume = e.target.value;
+    volumeValue.textContent = Math.round(e.target.value * 100) + '%';
+  }
 
-  // Disable right click and common inspect shortcuts
-  document.addEventListener('contextmenu', (event) => {
-    event.preventDefault();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    const key = event.key.toUpperCase();
-    if (
-      key === 'F12' ||
-      (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(key)) ||
-      (event.ctrlKey && key === 'U') ||
-      (event.ctrlKey && key === 'S')
-    ) {
-      event.preventDefault();
+  function toggleMute() {
+    if (video.volume > 0) {
+      video.volume = 0;
+      volumeSlider.value = 0;
+      volumeValue.textContent = '0%';
+      muteBtn.textContent = '🔇';
+    } else {
+      video.volume = 0.5;
+      volumeSlider.value = 0.5;
+      volumeValue.textContent = '50%';
+      muteBtn.textContent = '🔉';
     }
+  }
+
+  // Page navigation
+  let currentPage = 1;
+  const pages = document.querySelectorAll('.page');
+  const dots = document.querySelectorAll('.dot');
+  const backBtn = document.getElementById('backBtn');
+
+  function goTo(pageNum) {
+    if (pageNum < 1 || pageNum > pages.length) return;
+    
+    pages[currentPage - 1].classList.remove('active');
+    dots[currentPage - 1].classList.remove('active');
+    
+    currentPage = pageNum;
+    pages[currentPage - 1].classList.add('active');
+    dots[currentPage - 1].classList.add('active');
+    
+    backBtn.classList.toggle('visible', currentPage > 1);
+  }
+
+  function goBack() {
+    if (currentPage > 1) {
+      goTo(currentPage - 1);
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goTo(currentPage + 1);
+    if (e.key === 'ArrowLeft') goTo(currentPage - 1);
   });
 </script>
 </body>
