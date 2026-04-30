@@ -998,105 +998,45 @@
         I hope you grow up to be the BADDEST unc to ever unc in the existence of uncs.Anywayss as i was saying,
       I WISH i was there so i could celebrate your joyous day with you,
     You're the kind of person whose existence alone can light up a persons whole life.
-  i have met many people but none who feel as quietly necessary as you in my life.
-You're my SoUl fRiEnD and im PROUD of it.If something happens just know that i am always here for you
-for your rants anything literally mwah i wuv u. </p>
+
+Thank you for being the most amazing friend, mentor, and basically a sister to me. I don't know what I did to deserve someone as incredible as you. Every moment with you is golden, and I'm so grateful for all the memories we've made and will continue to make.
+
+On this special day, I want you to know that you deserve all the happiness in the world. May your birthday be filled with love, laughter, and all your favorite things. And may the year ahead bring you even more success, adventures, and beautiful moments.
+
+I love you so much, Hania. Happy 23rd Birthday! 🎂✨💕
+      </p>
 
       <div class="letter-footer">
-        <span class="letter-date" id="todayDate"></span>
-        <span class="letter-to">For Hania, with love ♡</span>
+        <span class="letter-date">April 30, 2026</span>
+        <span class="letter-to">With love, Alhaam</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- JavaScript -->
 <script>
-  // Generate stars
-  function generateStars(containerId, count = 50) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    for (let i = 0; i < count; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.top = Math.random() * 100 + '%';
-      star.style.setProperty('--dur', (Math.random() * 3 + 1) + 's');
-      container.appendChild(star);
-    }
-  }
-
-  generateStars('stars', 40);
-  generateStars('stars2', 40);
-  generateStars('stars3', 40);
-
-  // Set today's date
-  const today = new Date();
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('todayDate').textContent = today.toLocaleDateString('en-US', options);
-
-  // Video controls
-  const video = document.getElementById('bgVideo');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const volumeSlider = document.getElementById('volumeSlider');
-  const volumeValue = document.getElementById('volumeValue');
-  const muteBtn = document.getElementById('muteBtn');
-
-  pauseBtn.addEventListener('click', togglePlayPause);
-  volumeSlider.addEventListener('input', adjustVolume);
-  muteBtn.addEventListener('click', toggleMute);
-
-  function togglePlayPause() {
-    if (video.paused) {
-      video.play();
-      pauseBtn.classList.remove('paused');
-      pauseBtn.classList.add('playing');
-      document.getElementById('pauseLbl').textContent = 'Pause';
-    } else {
-      video.pause();
-      pauseBtn.classList.remove('playing');
-      pauseBtn.classList.add('paused');
-      document.getElementById('pauseLbl').textContent = 'Play';
-    }
-  }
-
-  function adjustVolume(e) {
-    video.volume = e.target.value;
-    volumeValue.textContent = Math.round(e.target.value * 100) + '%';
-  }
-
-  function toggleMute() {
-    if (video.volume > 0) {
-      video.volume = 0;
-      volumeSlider.value = 0;
-      volumeValue.textContent = '0%';
-      muteBtn.textContent = '🔇';
-    } else {
-      video.volume = 0.5;
-      volumeSlider.value = 0.5;
-      volumeValue.textContent = '50%';
-      muteBtn.textContent = '🔉';
-    }
-  }
-
-  // Page navigation
   let currentPage = 1;
-  const pages = document.querySelectorAll('.page');
-  const dots = document.querySelectorAll('.dot');
-  const backBtn = document.getElementById('backBtn');
 
   function goTo(pageNum) {
-    if (pageNum < 1 || pageNum > pages.length) return;
-    
-    pages[currentPage - 1].classList.remove('active');
-    dots[currentPage - 1].classList.remove('active');
-    
+    if (pageNum < 1 || pageNum > 3) return;
+
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+
+    const targetPage = document.getElementById('page' + pageNum);
+    targetPage.classList.add('active');
+    document.querySelectorAll('.dot')[pageNum - 1].classList.add('active');
+
+    updateBackButtonVisibility();
     currentPage = pageNum;
-    pages[currentPage - 1].classList.add('active');
-    dots[currentPage - 1].classList.add('active');
-    
-    backBtn.classList.toggle('visible', currentPage > 1);
+
+    if (pageNum === 1) {
+      spawnStars(document.getElementById('stars'));
+    } else if (pageNum === 2) {
+      spawnStars(document.getElementById('stars2'));
+    } else if (pageNum === 3) {
+      spawnStars(document.getElementById('stars3'));
+    }
   }
 
   function goBack() {
@@ -1105,11 +1045,72 @@ for your rants anything literally mwah i wuv u. </p>
     }
   }
 
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') goTo(currentPage + 1);
-    if (e.key === 'ArrowLeft') goTo(currentPage - 1);
+  function updateBackButtonVisibility() {
+    const backBtn = document.getElementById('backBtn');
+    if (currentPage > 1) {
+      backBtn.classList.add('visible');
+    } else {
+      backBtn.classList.remove('visible');
+    }
+  }
+
+  const video = document.getElementById('bgVideo');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const volumeSlider = document.getElementById('volumeSlider');
+  const muteBtn = document.getElementById('muteBtn');
+  const volumeValue = document.getElementById('volumeValue');
+
+  video.volume = 0.5;
+
+  pauseBtn.addEventListener('click', () => {
+    if (video.paused) {
+      video.play();
+      pauseBtn.classList.add('playing');
+      pauseBtn.classList.remove('paused');
+      document.getElementById('pauseLbl').textContent = 'Pause';
+    } else {
+      video.pause();
+      pauseBtn.classList.remove('playing');
+      pauseBtn.classList.add('paused');
+      document.getElementById('pauseLbl').textContent = 'Play';
+    }
+  });
+
+  volumeSlider.addEventListener('input', (e) => {
+    video.volume = e.target.value;
+    volumeValue.textContent = Math.round(e.target.value * 100) + '%';
+  });
+
+  muteBtn.addEventListener('click', () => {
+    if (video.muted) {
+      video.muted = false;
+      muteBtn.querySelector('.volume-icon').textContent = '🔉';
+    } else {
+      video.muted = true;
+      muteBtn.querySelector('.volume-icon').textContent = '🔇';
+    }
+  });
+
+  function spawnStars(container) {
+    container.innerHTML = '';
+    const numStars = 50;
+
+    for (let i = 0; i < numStars; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.setProperty('--dur', (Math.random() * 2 + 1) + 's');
+
+      container.appendChild(star);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    spawnStars(document.getElementById('stars'));
+    updateBackButtonVisibility();
   });
 </script>
+
 </body>
 </html>
